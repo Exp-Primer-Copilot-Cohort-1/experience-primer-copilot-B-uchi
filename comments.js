@@ -1,32 +1,13 @@
-// create web server
-const express = require('express');
-const app = express();
-const port = 3000;
+// Create web server
+var express = require('express');
+var router = express.Router();
 
-// import data
-const comments = require('./data/comments');
+// Import comments model
+var Comments = require('../models/comments');
 
-// set view engine
-app.set('view engine', 'ejs');
+// Create route for comments
+Comments.methods(['get', 'put', 'post', 'delete']);
+Comments.register(router, '/comments');
 
-// set path for static files
-app.use(express.static('public'));
-
-// home page
-app.get('/', (req, res) => {
-  res.render('home', {
-    comments: comments
-  });
-});
-
-// comment page
-app.get('/comments/:id', (req, res) => {
-  res.render('comments', {
-    comment: comments[req.params.id]
-  });
-});
-
-// listen on port 3000
-app.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
-});
+// Export module
+module.exports = router;
